@@ -1,0 +1,44 @@
+/*
+ * 
+ */
+
+plugins {
+    id 'application'
+    id 'eclipse'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    // Use JUnit test framework.
+    testImplementation 'junit:junit:4.13.2'
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:31.1-jre'
+}
+
+application {
+    mainClass = 'jre.install.trusted.cert.InstallCert'
+	applicationName = 'install-cert'
+    applicationDefaultJvmArgs = ["-Xms512m", "-Xmx1024m"]
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "jre.install.trusted.cert.InstallCert"
+    }
+    
+    baseName = 'install-cert'
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    // Keep jar clean:
+  	exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
